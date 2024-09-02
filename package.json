@@ -1,28 +1,30 @@
 {
-  "name": "json_viewer",
-  "description": "The most beautiful and customizable JSON/JSONP highlighter that your eyes have ever seen. Open source at https://github.com/tulios/json-viewer",
-  "author": "Tulio Ornelas <ornelas.tulio@gmail.com>",
+  "name": "json_viewer_v3",
+  "description": "The most beautiful and customizable JSON/JSONP highlighter that your eyes have ever seen.",
   "license": "MIT",
-  "repository": "https://github.com/tulios/json-viewer",
+  "repository": "https://github.com/mrfanii/JSON-Viewer-v3",
   "private": true,
   "dependencies": {
-    "archiver": "1.2.x",
-    "clean-webpack-plugin": "0.1.x",
+    "archiver": "^7.x",
+    "clean-webpack-plugin": "^4.x",
     "codemirror": "5.21.x",
-    "css-loader": "0.14.x",
-    "extract-text-webpack-plugin": "0.8.x",
-    "fs-extra": "0.18.x",
-    "mousetrap": "1.5.x",
-    "node-libs-browser": "^1.0.0",
-    "node-sass": "^4.5.3",
-    "promise": "7.0.x",
-    "sass-loader": "6.0.x",
-    "style-loader": "0.18.x",
+    "css-loader": "^6.x",
+    "fs-extra": "^11.x",
+    "mini-css-extract-plugin": "^2.x",
+    "mousetrap": "^1.x",
+    "node-libs-browser": "^2.x",
+    "sass": "^1.x",
+    "sass-loader": "^13.x",
+    "style-loader": "^3.x",
     "sweetalert": "1.0.x",
-    "webpack": "1.15.x"
+    "webpack": "^5.94.0"
   },
   "scripts": {
-    "release": "NODE_ENV=production npm run build",
-    "build": "./node_modules/.bin/webpack --progress --colors && node ./lib/release-script"
+    "release": "npm run build",
+    "build": "webpack --mode production --progress && node ./lib/release-script"
+  },
+  "devDependencies": {
+    "terser-webpack-plugin": "^5.3.10",
+    "webpack-cli": "^5.x"
   }
 }

@@ -1,4 +1,3 @@
-var Promise = require('promise');
 var loadCss = require('../load-css');
 var themeDarkness = require('../theme-darkness');
 

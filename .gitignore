@@ -1,5 +1,7 @@
 .DS_Store
-build/*
-pkg/*
-node_modules/*
+/build
+/pkg
+/node_modules
 *.log
+/#
+.idea

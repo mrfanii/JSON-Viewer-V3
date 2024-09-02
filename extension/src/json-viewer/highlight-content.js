@@ -100,7 +100,7 @@ function highlightContent(pre, outsideViewer, ignoreLimit) {
           highlighter.fold();
         }
 
-        exposeJson(value.jsonExtracted, outsideViewer);
+      exposeJson(value.jsonExtracted, outsideViewer);
         renderExtras(pre, options, highlighter);
 
       });

@@ -1,8 +1,8 @@
-![JSONViewer Logo](https://raw.githubusercontent.com/tulios/json-viewer/master/logo.png)
+![JSONViewer Logo](https://raw.githubusercontent.com/mrfanii/JSON-Viewer-v3/master/logo.png)
 
 # JSON Viewer
 
-![screenshot](https://raw.githubusercontent.com/tulios/json-viewer/master/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/mrfanii/JSON-Viewer-v3/master/screenshot.png)
 
 The most beautiful and customizable JSON/JSONP highlighter that your eyes have ever seen. It is a Chrome extension for printing JSON and JSONP.
 
@@ -40,14 +40,13 @@ Features:
 
 ### Install through Chrome Web Store
 
-[![https://chrome.google.com/webstore/detail/json-viewer/gbmdgpbipfallnflgajpaliibnhdgobh](https://raw.githubusercontent.com/tulios/json-viewer/master/tryitnow.png)](https://chrome.google.com/webstore/detail/json-viewer/gbmdgpbipfallnflgajpaliibnhdgobh)
+[//]: # ([![https://chrome.google.com/webstore/detail/json-viewer/gbmdgpbipfallnflgajpaliibnhdgobh]&#40;https://raw.githubusercontent.com/mrfanii/JSON-Viewer-v3/master/tryitnow.png&#41;]&#40;https://chrome.google.com/webstore/detail/json-viewer/gbmdgpbipfallnflgajpaliibnhdgobh&#41;)
 
 ### Or compile and load by yourself
 
   1. It depends on node (version in `package.json` engines).
-  2. `npm install --global yarn`
-  2. `yarn install`
-  3. `yarn run build`
+  2. `npm i`
+  3. `npm run build`
   4. Open Chrome and go to: chrome://extensions/
   5. Enable: "Developer mode"
   6. Click: "Load unpacked extension"
@@ -57,7 +56,7 @@ Features:
 
 ### JSON
 
-  [https://api.github.com/repos/tulios/json-viewer](https://api.github.com/repos/tulios/json-viewer)
+  [https://api.github.com/repos/mrfanii/JSON-Viewer-v3](https://api.github.com/repos/mrfanii/JSON-Viewer-v3)
 
   [http://graph.facebook.com/github](http://graph.facebook.com/github)
 
@@ -77,4 +76,4 @@ Features:
 
 ## License
 
-See [LICENSE](https://github.com/tulios/json-viewer/blob/master/LICENSE) for more details.
+See [LICENSE](https://github.com/mrfanii/JSON-Viewer-v3/blob/master/LICENSE) for more details.

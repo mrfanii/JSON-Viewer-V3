@@ -1,38 +1,52 @@
 {
-  "name": "JSON Viewer",
-  "version": "0.18.1",
-  "manifest_version": 2,
-  "author": "Tulio Ornelas <ornelas.tulio@gmail.com>",
-  "description": "The most beautiful and customizable JSON/JSONP highlighter that your eyes have ever seen. Open source at https://goo.gl/fmphc7",
-  "homepage_url": "https://github.com/tulios/json-viewer",
-  "minimum_chrome_version": "21",
+  "manifest_version": 3,
+  "name": "JSON Viewer (V3)",
+  "version": "3.0.0",
+  "description": "The most beautiful and customizable JSON/JSONP highlighter that your eyes have ever seen.",
+  "homepage_url": "https://github.com/mrfanii/JSON-Viewer-v3",
   "icons": {
-       "128": "icons/128.png",
-       "32": "icons/32.png",
-       "16": "icons/16.png"
+    "128": "icons/128.png",
+    "32": "icons/32.png",
+    "16": "icons/16.png"
   },
-  "web_accessible_resources": [
-    "assets/viewer.css",
-    "assets/viewer-alert.css",
-    "pages/options.html",
-    "pages/omnibox.html"
-  ],
+  "background": {
+    "service_worker": "assets/background.js"
+  },
   "offline_enabled": true,
-  "omnibox": { "keyword" : "json-viewer" },
+  "omnibox": {
+    "keyword": "json-viewer"
+  },
   "options_page": "pages/options.html",
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["assets/viewer.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "assets/viewer.js"
+      ],
       "run_at": "document_start"
     }
   ],
-  "background": {
-    "scripts": ["assets/backend.js", "assets/omnibox.js"],
-    "persistent": false
-  },
-  "permissions": [
-    "*://*/*",
+  "host_permissions": [
     "<all_urls>"
+  ],
+  "permissions": [
+    "scripting",
+    "activeTab",
+    "storage"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/viewer.css",
+        "assets/viewer-alert.css",
+        "pages/options.html",
+        "pages/omnibox.html"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
   ]
 }

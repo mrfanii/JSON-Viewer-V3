@@ -31,11 +31,11 @@ function renderVersion() {
   var version = process.env.VERSION;
   var versionLink = document.getElementsByClassName('version')[0];
   versionLink.innerHTML = version;
-  versionLink.href = "https://github.com/tulios/json-viewer/tree/" + version;
+  versionLink.href = "https://github.com/mrfanii/JSON-Viewer-v3/tree/" + version;
 }
 
-function onLoaded() {
-  var currentOptions = Storage.load();
+async function onLoaded() {
+  var currentOptions = await Storage.load();
 
   renderVersion();
   renderThemeList(CodeMirror, currentOptions.theme);

@@ -1,14 +1,12 @@
-function exposeJson(text, outsideViewer) {
-  console.info("[JSONViewer] Your json was stored into 'window.json', enjoy!");
+const sendJson = require('./send-json.js');
 
+function exposeJson(text, outsideViewer) {
   if (outsideViewer) {
     window.json = JSON.parse(text);
-
   } else {
-    var script = document.createElement("script") ;
-    script.innerHTML = 'window.json = ' + text + ';';
-    document.head.appendChild(script);
+    sendJson(text)
   }
+  console.info("[JSONViewer] Your json was stored into 'window.json', enjoy!");
 }
 
 module.exports = exposeJson;

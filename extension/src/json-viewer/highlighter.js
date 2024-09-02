@@ -8,6 +8,7 @@ require('codemirror/addon/search/matchesonscrollbar');
 require('codemirror/addon/search/searchcursor');
 require('codemirror/addon/search/search');
 require('codemirror/mode/javascript/javascript');
+
 var merge = require('./merge');
 var defaults = require('./options/defaults');
 var URL_PATTERN = require('./url-pattern');
@@ -17,7 +18,7 @@ function Highlighter(jsonText, options) {
   this.options = options || {};
   this.text = jsonText;
   this.defaultSearch = false;
-  this.theme = this.options.theme || "default";
+  this.theme = this.options.theme || 'default';
   this.theme = this.theme.replace(/_/, ' ');
 }
 
@@ -25,7 +26,7 @@ Highlighter.prototype = {
   highlight: function() {
     this.editor = CodeMirror(document.body, this.getEditorOptions());
     if (!this.alwaysRenderAllContent()) this.preventDefaultSearch();
-    if (this.isReadOny()) this.getDOMEditor().className += ' read-only';
+    if (this.isReadOnly()) this.getDOMEditor().classList.add('read-only');
 
     this.bindRenderLine();
     this.bindMousedown();
@@ -44,71 +45,56 @@ Highlighter.prototype = {
   },
 
   getDOMEditor: function() {
-    return document.getElementsByClassName('CodeMirror')[0];
+    return document.querySelector('.CodeMirror');
   },
 
   fold: function() {
-    var skippedRoot = false;
-    var firstLine = this.editor.firstLine();
-    var lastLine = this.editor.lastLine();
+    let skippedRoot = false;
+    const firstLine = this.editor.firstLine();
+    const lastLine = this.editor.lastLine();
 
-    for (var line = firstLine; line <= lastLine; line++) {
+    for (let line = firstLine; line <= lastLine; line++) {
       if (!skippedRoot) {
         if (/(\[|\{)/.test(this.editor.getLine(line).trim())) skippedRoot = true;
-
       } else {
-        this.editor.foldCode({line: line, ch: 0}, null, "fold");
+        this.editor.foldCode({ line: line, ch: 0 }, null, 'fold');
       }
     }
   },
 
   unfoldAll: function() {
-    for (var line = 0; line < this.editor.lineCount(); line++) {
-      this.editor.foldCode({line: line, ch: 0}, null, "unfold");
+    for (let line = 0; line < this.editor.lineCount(); line++) {
+      this.editor.foldCode({ line: line, ch: 0 }, null, 'unfold');
     }
   },
 
   bindRenderLine: function() {
-    var self = this;
-    this.editor.off("renderLine");
-    this.editor.on("renderLine", function(cm, line, element) {
-      var elementsNode = element.getElementsByClassName("cm-string");
+    this.editor.off('renderLine');
+    this.editor.on('renderLine', (cm, line, element) => {
+      const elementsNode = element.getElementsByClassName('cm-string');
       if (!elementsNode || elementsNode.length === 0) return;
 
-      var elements = [];
-      for (var i = 0; i < elementsNode.length; i++) {
-        elements.push(elementsNode[i]);
-      }
+      const elements = Array.from(elementsNode);
 
-      var textContent = elements.reduce(function(str, node) {
-        return str += node.textContent;
-      }, "");
+      const textContent = elements.reduce((str, node) => str + node.textContent, '');
+      const text = this.removeQuotes(textContent);
 
-      var text = self.removeQuotes(textContent);
-
-      if (text.match(URL_PATTERN) && self.clickableUrls()) {
-        var decodedText = self.decodeText(text);
-        elements.forEach(function(node) {
-          if (self.wrapLinkWithAnchorTag()) {
-            var linkTag = document.createElement("a");
+      if (text.match(URL_PATTERN) && this.clickableUrls()) {
+        const decodedText = this.decodeText(text);
+        elements.forEach(node => {
+          if (this.wrapLinkWithAnchorTag()) {
+            const linkTag = document.createElement('a');
             linkTag.href = decodedText;
-            linkTag.setAttribute('target', '_blank')
-            linkTag.classList.add("cm-string");
+            linkTag.target = '_blank';
+            linkTag.classList.add('cm-string');
 
-            // reparent the child nodes to preserve the cursor when editing
-            node.childNodes.forEach(function(child) {
-              linkTag.appendChild(child);
-            });
-
-            // block CodeMirror's contextmenu handler
-            linkTag.addEventListener("contextmenu", function(e) {
-              if (e.bubbles) e.cancelBubble = true;
-            });
+            node.childNodes.forEach(child => linkTag.appendChild(child));
+            linkTag.addEventListener('contextmenu', e => e.stopPropagation());
 
             node.appendChild(linkTag);
           } else {
-            node.classList.add("cm-string-link");
-            node.setAttribute("data-url", decodedText);
+            node.classList.add('cm-string-link');
+            node.dataset.url = decodedText;
           }
         });
       }
@@ -116,16 +102,12 @@ Highlighter.prototype = {
   },
 
   bindMousedown: function() {
-    var self = this;
-    this.editor.off("mousedown");
-    this.editor.on("mousedown", function(cm, event) {
-      var element = event.target;
-      if (element.classList.contains("cm-string-link")) {
-        var url = element.getAttribute("data-url")
-        var target = "_self";
-        if (self.openLinksInNewWindow()) {
-          target = "_blank";
-        }
+    this.editor.off('mousedown');
+    this.editor.on('mousedown', (cm, event) => {
+      const element = event.target;
+      if (element.classList.contains('cm-string-link')) {
+        const url = element.dataset.url;
+        const target = this.openLinksInNewWindow() ? '_blank' : '_self';
         window.open(url, target);
       }
     });
@@ -136,83 +118,74 @@ Highlighter.prototype = {
   },
 
   includeQuotes: function(text) {
-    return "\"" + text + "\"";
+    return `"${text}"`;
   },
 
   decodeText: function(text) {
-    var div = document.createElement("div");
+    const div = document.createElement('div');
     div.innerHTML = text;
-    return div.firstChild ? div.firstChild.nodeValue : "";
+    return div.firstChild ? div.firstChild.nodeValue : '';
   },
 
   getEditorOptions: function() {
-    var obligatory = {
+    const obligatory = {
       value: this.text,
       theme: this.theme,
-      readOnly: this.isReadOny() ? true : false,
-      mode: "application/ld+json",
+      readOnly: this.isReadOnly(),
+      mode: 'application/ld+json',
       indentUnit: 2,
       tabSize: 2,
-      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+      gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
       extraKeys: this.getExtraKeysMap()
-    }
+    };
 
     if (this.alwaysRenderAllContent()) {
       obligatory.viewportMargin = Infinity;
     }
 
-    var optional = defaults.structure;
-    var configured = this.options.structure;
+    const optional = defaults.structure;
+    const configured = this.options.structure;
 
     return merge({}, optional, configured, obligatory);
   },
 
   getExtraKeysMap: function() {
-    var extraKeyMap = {
-      "Esc": function(cm) {
+    const extraKeyMap = {
+      'Esc': cm => {
         CodeMirror.commands.clearSearch(cm);
         cm.setSelection(cm.getCursor());
         cm.focus();
       }
-    }
+    };
 
     if (this.options.structure.readOnly) {
-      extraKeyMap["Enter"] = function(cm) {
-        CodeMirror.commands.findNext(cm);
-      }
-
-      extraKeyMap["Shift-Enter"] = function(cm) {
-        CodeMirror.commands.findPrev(cm);
-      }
-
-      extraKeyMap["Ctrl-V"] = extraKeyMap["Cmd-V"] = function(cm) {};
+      extraKeyMap['Enter'] = cm => CodeMirror.commands.findNext(cm);
+      extraKeyMap['Shift-Enter'] = cm => CodeMirror.commands.findPrev(cm);
+      extraKeyMap['Ctrl-V'] = extraKeyMap['Cmd-V'] = cm => {}; // Prevent default paste behavior
     }
 
-    var nativeSearch = this.alwaysRenderAllContent();
-    extraKeyMap["Ctrl-F"] = nativeSearch ? false : this.openSearchDialog;
-    extraKeyMap["Cmd-F"] = nativeSearch ? false : this.openSearchDialog;
+    const nativeSearch = this.alwaysRenderAllContent();
+    extraKeyMap['Ctrl-F'] = nativeSearch ? false : this.openSearchDialog;
+    extraKeyMap['Cmd-F'] = nativeSearch ? false : this.openSearchDialog;
     return extraKeyMap;
   },
 
   preventDefaultSearch: function() {
-    document.addEventListener("keydown", function(e) {
-      var metaKey = navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey;
+    document.addEventListener('keydown', e => {
+      const metaKey = navigator.platform.includes('Mac') ? e.metaKey : e.ctrlKey;
       if (!this.defaultSearch && e.keyCode === F_LETTER && metaKey) {
         e.preventDefault();
       }
-    }.bind(this), false);
+    });
   },
 
   openSearchDialog: function(cm) {
-    cm.setCursor({line: 0, ch: 0});
+    cm.setCursor({ line: 0, ch: 0 });
     CodeMirror.commands.find(cm);
   },
 
   alwaysRenderAllContent: function() {
-    // "awaysRenderAllContent" was a typo but to avoid any problems
-    // I'll keep it a while
-    return this.options.addons.alwaysRenderAllContent ||
-           this.options.addons.awaysRenderAllContent;
+    return this.options.addons.alwaysRenderAllContent || this.options.addons.awaysRenderAllContent;
   },
 
   clickableUrls: function() {
@@ -227,9 +200,9 @@ Highlighter.prototype = {
     return this.options.addons.openLinksInNewWindow;
   },
 
-  isReadOny: function() {
+  isReadOnly: function() {
     return this.options.structure.readOnly;
   }
-}
+};
 
 module.exports = Highlighter;

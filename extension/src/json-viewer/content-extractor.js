@@ -1,4 +1,3 @@
-var Promise = require('promise');
 var jsonFormater = require('./jsl-format');
 var extractJSON = require('./extract-json');
 

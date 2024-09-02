@@ -28,21 +28,10 @@ Features
 * Scratch pad, a new area which you can type/paste JSON and format indefinitely using a button or key shortcut. To access type `json-viewer` + `TAB` + `scratch pad` ENTER
 
 This plugin is open source
-https://github.com/tulios
+https://github.com/mrfanii/JSON-Viewer-v3
 
 Bugs and suggestions
-https://github.com/tulios/json-viewer/issues
-
-Contributors
-Thiago Pontes (@thiagopnts)
-@bluec0re
-@North101
-Ben Hollander (@benhollander)
-Mehdi Bahrami (@mehdibahraami)
-Reimund Trost (@reimund)
-Ben van Enckevort (@benvan)
+https://github.com/mrfanii/JSON-Viewer-v3/issues
 
 License
 MIT License
-
-Any questions tweet me @tulios
